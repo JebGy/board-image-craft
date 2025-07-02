@@ -1,5 +1,7 @@
+import TrelloBoard from "@/components/TrelloBoard";
+import { ActionFunctionArgs } from "react-router-dom";
 
-import TrelloBoard from '@/components/TrelloBoard';
+
 
 const Index = () => {
   return <TrelloBoard />;

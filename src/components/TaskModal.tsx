@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { X, Image, Tag, Plus } from 'lucide-react';
 import {
@@ -13,6 +12,9 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Task, Column } from './TrelloBoard';
+import { ActionFunctionArgs } from 'react-router-dom';
+
+const BASE_URL = "http://localhost:3000/api"; // Cambia a tu backend real
 
 interface TaskModalProps {
   isOpen: boolean;
@@ -22,6 +24,11 @@ interface TaskModalProps {
   columnId: string;
   columns: Column[];
 }
+
+export const action = async ({ request }: ActionFunctionArgs) => {
+  const formData = request.formData();
+  console.log(Object.entries(formData));
+};
 
 const TaskModal: React.FC<TaskModalProps> = ({
   isOpen,
@@ -104,6 +111,8 @@ const TaskModal: React.FC<TaskModalProps> = ({
     return colors[tag] || 'bg-gray-100 text-gray-800 border-gray-200';
   };
 
+
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
@@ -113,7 +122,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
           </DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form className="space-y-6" onSubmit={handleSubmit}>
           <div>
             <Label htmlFor="title" className="text-sm font-medium text-gray-700">
               Título *
