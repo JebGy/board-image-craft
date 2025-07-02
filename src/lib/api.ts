@@ -1,6 +1,6 @@
 import { Column, Task } from "@/components/TrelloBoard";
 
-const BASE_URL = "http://localhost:3000/api"; // Cambia a tu backend real
+const BASE_URL = "https://taskgrid-api.vercel.app/api"; // Cambia a tu backend real
 
 // COLUMNAS
 export const fetchColumns = async (): Promise<Column[]> => {
