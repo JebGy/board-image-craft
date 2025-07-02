@@ -1,6 +1,6 @@
 import { Column, Task } from "@/components/TrelloBoard";
 
-const BASE_URL = "https://taskgrid-api.vercel.app/api"; // Cambia a tu backend real
+const BASE_URL = "http://localhost:3000/api"; // Cambia a tu backend real
 
 // COLUMNAS
 export const fetchColumns = async (): Promise<Column[]> => {
@@ -48,9 +48,9 @@ export const createTask = async (task: Omit<Task, "id">) => {
   return res.json();
 };
 
-export const updateTask = async (task: Task) => {
-  const res = await fetch(`${BASE_URL}/tasks/${task.id}`, {
-    method: "PATCH",
+export const updateTaskAPI = async (task: Task) => {
+  const res = await fetch(`${BASE_URL}/edittask`, {
+    method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(task),
   });
@@ -58,9 +58,14 @@ export const updateTask = async (task: Task) => {
   return res.json();
 };
 
-export const deleteTask = async (id: string) => {
-  const res = await fetch(`${BASE_URL}/tasks/${id}`, {
+export const deleteTaskAPI = async (id: string) => {
+  const res = await fetch(`${BASE_URL}/deletetask`, {
     method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+    body:JSON.stringify({
+      id:id
+    }),
+
   });
   if (!res.ok) throw new Error("Error al eliminar tarea");
   return res.json();

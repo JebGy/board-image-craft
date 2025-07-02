@@ -111,7 +111,36 @@ const TaskModal: React.FC<TaskModalProps> = ({
     return colors[tag] || 'bg-gray-100 text-gray-800 border-gray-200';
   };
 
+  // Nueva función para manejar la subida de archivos
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
 
+    const reader = new FileReader();
+    reader.onloadend = async () => {
+      const base64 = (reader.result as string).split(',')[1];
+      try {
+        const res = await fetch('http://localhost:3000/api/upload', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            file: base64,
+            fileName: file.name,
+            contentType: file.type,
+          }),
+        });
+        const data = await res.json();
+        if (data.url) {
+          setImage(data.url);
+        } else {
+          alert('Error al subir la imagen');
+        }
+      } catch (err) {
+        alert('Error al subir la imagen');
+      }
+    };
+    reader.readAsDataURL(file);
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -161,6 +190,16 @@ const TaskModal: React.FC<TaskModalProps> = ({
               onChange={(e) => setImage(e.target.value)}
               placeholder="https://ejemplo.com/imagen.jpg"
               className="mt-1"
+            />
+            {/* Nuevo input para subir archivo */}
+            <Label className="text-sm font-medium text-gray-700 flex items-center mt-2">
+              <Image className="w-4 h-4 mr-1" />
+              Subir Imagen
+            </Label>
+            <Input
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
             />
             {image && (
               <div className="mt-2">

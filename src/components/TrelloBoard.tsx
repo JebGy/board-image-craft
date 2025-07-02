@@ -3,7 +3,13 @@ import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Column from "./Column";
 import TaskModal from "./TaskModal";
-import { createTask, fetchColumns, moveTaskAPI } from "@/lib/api";
+import {
+  createTask,
+  deleteTaskAPI,
+  fetchColumns,
+  moveTaskAPI,
+  updateTaskAPI,
+} from "@/lib/api";
 
 export interface Task {
   id: string;
@@ -89,23 +95,32 @@ const TrelloBoard = () => {
   };
 
   const updateTask = (updatedTask: Task) => {
-    setColumns((prev) =>
-      prev.map((col) => ({
-        ...col,
-        tasks: col.tasks.map((task) =>
-          task.id === updatedTask.id ? updatedTask : task
-        ),
-      }))
-    );
+    updateTaskAPI(updatedTask)
+      .then((taskFromServer) => {
+        setColumns((prev) =>
+          prev.map((col) => ({
+            ...col,
+            tasks: col.tasks.map((task) =>
+              task.id === taskFromServer.id ? taskFromServer : task
+            ),
+          }))
+        );
+      })
+      .catch((error) => {
+        // Aquí puedes mostrar un toast o alerta de error
+        console.error("Error al actualizar la tarea:", error);
+      });
   };
 
   const deleteTask = (taskId: string) => {
-    setColumns((prev) =>
-      prev.map((col) => ({
-        ...col,
-        tasks: col.tasks.filter((task) => task.id !== taskId),
-      }))
-    );
+    deleteTaskAPI(taskId).then(() => {
+      setColumns((prev) =>
+        prev.map((col) => ({
+          ...col,
+          tasks: col.tasks.filter((task) => task.id !== taskId),
+        }))
+      );
+    });
   };
 
   const moveTask = (taskId: string, targetColumnId: string) => {
@@ -159,9 +174,7 @@ const TrelloBoard = () => {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6">
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">
-            TaskGrid
-          </h1>
+          <h1 className="text-3xl font-bold text-gray-800 mb-2">TaskGrid</h1>
           <p className="text-gray-600">
             Organiza tus tareas de manera eficiente
           </p>
