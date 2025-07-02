@@ -120,7 +120,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
     reader.onloadend = async () => {
       const base64 = (reader.result as string).split(',')[1];
       try {
-        const res = await fetch('http://localhost:3000/api/upload', {
+        const res = await fetch('https://taskgrid-api.vercel.app/api/upload', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
