@@ -8,7 +8,7 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: true,
     port: 80,
-    allowedHosts: ["www.taskgrid.lat"],
+    allowedHosts: ["www.taskgrid.lat","taskgrid.lat"],
   },
   plugins: [
     react(),
