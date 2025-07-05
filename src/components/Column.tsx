@@ -25,9 +25,9 @@ const Column: React.FC<ColumnProps> = ({
   const getColumnColor = (columnId: string) => {
     switch (columnId) {
       case 'todo':
-        return 'bg-gray-100 border-gray-300';
+        return 'bg-orange-100 border-orange-300';
       case 'doing':
-        return 'bg-orange-50 border-orange-300';
+        return 'bg-blue-50 border-blue-300';
       case 'done':
         return 'bg-green-50 border-green-300';
       default:
